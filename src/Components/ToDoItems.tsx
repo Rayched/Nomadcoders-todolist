@@ -1,5 +1,5 @@
 import { useRecoilValue } from "recoil";
-import { ToDoSelectors } from "../modules/Atoms";
+import { A_ToDos, ToDoSelectors } from "../modules/Atoms";
 import styled from "styled-components";
 
 const ItemList = styled.div`
@@ -19,7 +19,7 @@ const ToDoItem = styled.li`
 
 
 function ToDoItems(){
-    const ToDos = useRecoilValue(ToDoSelectors);
+    const ToDos = useRecoilValue(A_ToDos);
 
     return (
         <ItemList>
@@ -29,8 +29,8 @@ function ToDoItems(){
                         return (
                             <ToDoItem>
                                 {todo.ToDo} / {todo.Category}
-                                <button>진행</button>
-                                <button>완료</button>
+                                <button name="Doing">진행</button>
+                                <button name="Done">완료</button>
                             </ToDoItem>
                         );
                     })

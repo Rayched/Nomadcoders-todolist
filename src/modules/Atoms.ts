@@ -13,13 +13,18 @@ export const enum Categorys {
 export interface I_ToDo {
     ID?: string;
     ToDo?: string;
-    Category?: "ToDo"|"Doing"|"Done";
+    Category?: Categorys;
 };
 
 export const isDark = atom({
     key: "isDarks",
     default: false
 });
+
+export const SelectCategorys = atom({
+    key: "SelectedCategorys",
+    default: Categorys.ToDo
+})
 
 export const ToDoAtoms = atom<I_ToDo[]>({
     key: "ToDoOrigin",
@@ -30,11 +35,7 @@ export const ToDoSelectors = selector({
     key: "ToDoSelector",
     get: ({get}) => {
         const originToDos = get(ToDoAtoms);
-        const NewToDo = [
-            originToDos.filter((todo) => todo.Category === "ToDo"),
-            originToDos.filter((todo) => todo.Category === "Doing"),
-            originToDos.filter((todo) => todo.Category === "Done")
-        ];
-        return NewToDo;
+        const selectedCategory = get(SelectCategorys);
+        return originToDos.filter((todo) => todo.Category === selectedCategory);
     }
 });

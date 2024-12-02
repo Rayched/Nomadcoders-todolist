@@ -1,11 +1,7 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { isDark, ToDoAtoms, ToDoSelectors } from "../modules/Atoms";
+import { Categorys, isDark, SelectCategorys, ToDoAtoms, ToDoSelectors } from "../modules/Atoms";
 import ToDoForm from "./ToDoForm";
-import ToDoItems from "./ToDoItem";
-import { useEffect, useState } from "react";
-import { inherits } from "util";
-import { updatePropertySignature } from "typescript";
 import ToDoItem from "./ToDoItem";
 
 interface I_CategoryBtn {
@@ -49,16 +45,24 @@ const CategoryItems = styled.button<I_CategoryBtn>`
     display: flex;
     margin: 0px 5px;
     padding: 3px;
-    color: ${(props) => props.name === props.nowTabs ? props.theme.itemTextColor: "inherits"};
-    background-color: ${
+
+    color: ${(props) => props.nowTabs === props.value ? props.theme.itemTextColor : "inherit"};
+    background-color: ${(props) => props.nowTabs === props.value ? props.theme.itemBorderColor : props.theme.itemBgColor};
+    border: 2px solid ${(props) => props.nowTabs === props.value ? props.theme.itemBgColor : props.theme.itemBorderColor};
+`;
+
+ /*
+        color: ${(props) => props.name === props.nowTabs ? props.theme.itemTextColor: "inherits"};
+        background-color: ${
         (props) => props.name === props.nowTabs ? 
         props.theme.itemBorderColor : props.theme.itemBgColor
     };
 
     border: 2px solid ${
         (props) => props.name === props.nowTabs ? 
-        props.theme.itemBgColor : props.theme.itemBorderColor};
-`;
+        props.theme.itemBgColor : props.theme.itemBorderColor
+    };
+    */
 
 const ToDoWrapper = styled.div``;
 
@@ -70,23 +74,22 @@ const ToDoList = styled.div`
 
 function Home(){
     const [Darks, setDark] = useRecoilState(isDark);
-    const [ToDo, Doing, Done] = useRecoilValue(ToDoSelectors);
-
-    const [Tabs, setTabs] = useState("ToDo");
+    const ToDos = useRecoilValue(ToDoSelectors);
+    const [nowCategorys, setCategorys] = useRecoilState(SelectCategorys);
+    
 
     const TabChange = (event: React.MouseEvent<HTMLButtonElement>) => {
-        const {currentTarget: {name}} = event;
-        if(Tabs === name){
+        const {currentTarget: {value}} = event;
+        
+        if(value === nowCategorys){
             return;
         } else {
-            setTabs(name);
+            setCategorys(value as Categorys);
         }
     }
 
     const ChangeThemes = () => setDark(!Darks);
 
-    useEffect(() => console.log(Tabs));
-    
     return (
         <MainWrapper>
             <Headers>
@@ -96,17 +99,21 @@ function Home(){
                 </NavBars>
             </Headers>
             <CategoryBars>
-                <CategoryItems name="ToDo" onClick={TabChange} nowTabs={Tabs}>일정 등록</CategoryItems>
-                <CategoryItems name="Doing" onClick={TabChange} nowTabs={Tabs}>일정 진행</CategoryItems>
-                <CategoryItems name="Done" onClick={TabChange} nowTabs={Tabs}>일정 완료</CategoryItems>
+                <CategoryItems value={Categorys.ToDo} onClick={TabChange} nowTabs={nowCategorys}>일정 등록</CategoryItems>
+                <CategoryItems value={Categorys.Doing} onClick={TabChange} nowTabs={nowCategorys}>일정 진행</CategoryItems>
+                <CategoryItems value={Categorys.Done} onClick={TabChange} nowTabs={nowCategorys}>일정 완료</CategoryItems>
             </CategoryBars>
             <ToDoWrapper>
                 <ToDoForm />
                 <ToDoList>
                     <ul>
-                        {Tabs === "ToDo" ? ToDo.map((todo) => <ToDoItem ID={todo.ID} ToDo={todo.ToDo} Category={todo.Category} />): null}
-                        {Tabs === "Doing" ? Doing.map((todo) => <ToDoItem ID={todo.ID} ToDo={todo.ToDo} Category={todo.Category} />): null}
-                        {Tabs === "Done" ? Done.map((todo) => <ToDoItem ID={todo.ID} ToDo={todo.ToDo} Category={todo.Category} />): null}
+                        {
+                            ToDos.map((todo) => {
+                                return (
+                                    <ToDoItem ID={todo.ID} ToDo={todo.ToDo} Category={todo.Category} />
+                                );
+                            })
+                        }
                     </ul>
                 </ToDoList>
             </ToDoWrapper>

@@ -31,7 +31,7 @@ function ToDoItem({ID, ToDo, Category}: I_ToDo){
         setToDos((oldToDos) => {
             const TargetIndex = oldToDos?.findIndex((todo) => todo.ID === ID);
             const newToDo: I_ToDo = {
-                ID, ToDo, Category: name as any
+                ID, ToDo, Category: name as Categorys
             };
 
             return [
@@ -42,13 +42,23 @@ function ToDoItem({ID, ToDo, Category}: I_ToDo){
         });
     };
 
+    const ToDo_Delete = () => {
+        setToDos((oldToDos) => {
+            const TargetIndex = oldToDos.findIndex((todo) => ID === todo.ID);
+            const BeforeTarget = oldToDos.slice(0, TargetIndex);
+            const AfterTarget = oldToDos.slice(TargetIndex + 1);
+            return [...BeforeTarget, ...AfterTarget]
+        });
+    };
+
     return (
         <div>
             <Items>
                 {ToDo}
-                {Category === "ToDo" ? null : <CategoryBtn name="ToDo" onClick={ChangeCategory}>등록</CategoryBtn>}
-                {Category === "Doing" ? null : <CategoryBtn name="Doing" onClick={ChangeCategory}>진행</CategoryBtn>}
-                {Category === "Done" ? null : <CategoryBtn name="Done" onClick={ChangeCategory}>완료</CategoryBtn>}
+                {Category === Categorys.ToDo ? null : <CategoryBtn name="ToDo" onClick={ChangeCategory}>등록</CategoryBtn>}
+                {Category === Categorys.Doing ? null : <CategoryBtn name="Doing" onClick={ChangeCategory}>진행</CategoryBtn>}
+                {Category === Categorys.Done ? null : <CategoryBtn name="Done" onClick={ChangeCategory}>완료</CategoryBtn>}
+                <CategoryBtn onClick={ToDo_Delete}>삭제</CategoryBtn>
             </Items>
         </div>
     );

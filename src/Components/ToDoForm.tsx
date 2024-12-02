@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
-import { useSetRecoilState } from "recoil";
-import { Categorys, I_ToDo, ToDoAtoms } from "../modules/Atoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { Categorys, I_ToDo, SelectCategorys, ToDoAtoms } from "../modules/Atoms";
 import styled from "styled-components";
 
 interface I_ToDoText {
@@ -11,6 +11,10 @@ interface I_ToDoBtn {
     todoInput?: string;
 }
 
+interface I_ToDoForm {
+    nowTab?: Categorys;
+}
+
 const ToDoBtn = styled.button<I_ToDoBtn>`
     display: ${({todoInput}) => todoInput === "" ? "none" : "inline-block"};
 `;
@@ -18,6 +22,7 @@ const ToDoBtn = styled.button<I_ToDoBtn>`
 function ToDoForm(){
     const {watch, register, setValue, handleSubmit, setFocus} = useForm<I_ToDoText>();
     const setToDo = useSetRecoilState(ToDoAtoms);
+    const nowCategorys = useRecoilValue(SelectCategorys);
     const Inputs = watch("toDoText");
 
     const saveToDos = ({toDoText}: I_ToDoText) => {
@@ -28,7 +33,7 @@ function ToDoForm(){
             const ToDoConvert: I_ToDo = {
                 ID: Date(),
                 ToDo: toDoText,
-                Category: Categorys.ToDo
+                Category: nowCategorys,
             };
     
             setToDo((oldToDos) => [

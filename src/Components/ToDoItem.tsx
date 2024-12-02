@@ -40,13 +40,12 @@ function ToDoItem({ID, ToDo, Category}: I_ToDo){
                 ...oldToDos.slice(TargetIndex + 1)
             ];
         });
-        console.log(name);
     };
 
     return (
         <div>
             <Items>
-                {ToDo} / {Category}
+                {ToDo}
                 {Category === "ToDo" ? null : <CategoryBtn name="ToDo" onClick={ChangeCategory}>등록</CategoryBtn>}
                 {Category === "Doing" ? null : <CategoryBtn name="Doing" onClick={ChangeCategory}>진행</CategoryBtn>}
                 {Category === "Done" ? null : <CategoryBtn name="Done" onClick={ChangeCategory}>완료</CategoryBtn>}

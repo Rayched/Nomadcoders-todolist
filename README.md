@@ -81,9 +81,17 @@
 ---
 <br/>
 
-- **📑 ""**
-            
+- **📑 "ToDoItem, `Category` 별로 나눠서 보여주는 기능 추가"**
 
+    - `recoil`의 `selector`를 활용해서 기존 `toDoAtoms`에 저장된 <br/>
+    `ToDos`를 `Category` 별로 나눈 새로운 배열 `state`를 만들었다.
+    - 그리고 현재 탭을 나타내는 별도의 상태를 만들고 <br/>
+    현재 탭과 일치하는 카테고리를 가진 `ToDoItem`만 나오도록 <br/>
+    업데이트를 진행하였다.
+
+    <img src="refImgs/20241202_ToDoItems.png">
+
+---
 
 
 

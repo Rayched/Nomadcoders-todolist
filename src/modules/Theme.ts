@@ -11,7 +11,7 @@ interface I_themes {
 export const LightTheme: I_themes = {
     textColor: "black",
     bgColor: "white",
-    itemTextColor: "black",
+    itemTextColor: "white",
     itemBgColor: "#9AECDB",
     itemBorderColor: "#58B19F"
 };

@@ -29,6 +29,12 @@ export const ToDoAtoms = atom<I_ToDo[]>({
 export const ToDoSelectors = selector({
     key: "ToDoSelector",
     get: ({get}) => {
-
+        const originToDos = get(ToDoAtoms);
+        const NewToDo = [
+            originToDos.filter((todo) => todo.Category === "ToDo"),
+            originToDos.filter((todo) => todo.Category === "Doing"),
+            originToDos.filter((todo) => todo.Category === "Done")
+        ];
+        return NewToDo;
     }
 });

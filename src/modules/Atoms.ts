@@ -13,7 +13,7 @@ export const enum Categorys {
 export interface I_ToDo {
     ID?: string;
     ToDo?: string;
-    Category: Categorys
+    Category?: "ToDo"|"Doing"|"Done";
 };
 
 export const isDark = atom({
@@ -21,7 +21,7 @@ export const isDark = atom({
     default: false
 });
 
-export const A_ToDos = atom<I_ToDo[]>({
+export const ToDoAtoms = atom<I_ToDo[]>({
     key: "ToDoOrigin",
     default: []
 });
@@ -29,7 +29,6 @@ export const A_ToDos = atom<I_ToDo[]>({
 export const ToDoSelectors = selector({
     key: "ToDoSelector",
     get: ({get}) => {
-        const originToDos = get(A_ToDos);
-        return originToDos;
+
     }
-})
+});

@@ -1,32 +1,43 @@
 import { useForm } from "react-hook-form";
-import { useRecoilState } from "recoil";
-import { A_ToDos, Categorys, I_ToDo } from "../modules/Atoms";
-import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
+import { Categorys, I_ToDo, ToDoAtoms } from "../modules/Atoms";
+import styled from "styled-components";
 
 interface I_ToDoText {
     toDoText?: string;
 }
 
+interface I_ToDoBtn {
+    todoInput?: string;
+}
+
+const ToDoBtn = styled.button<I_ToDoBtn>`
+    display: ${({todoInput}) => todoInput === "" ? "none" : "inline-block"};
+`;
+
 function ToDoForm(){
-    const {register, setValue, handleSubmit} = useForm<I_ToDoText>();
-    const [ToDo, setToDo] = useRecoilState(A_ToDos);
+    const {watch, register, setValue, handleSubmit, setFocus} = useForm<I_ToDoText>();
+    const setToDo = useSetRecoilState(ToDoAtoms);
+    const Inputs = watch("toDoText");
 
     const saveToDos = ({toDoText}: I_ToDoText) => {
-        const ToDoConvert: I_ToDo = {
-            ID: Date(),
-            ToDo: toDoText,
-            Category: Categorys.ToDo
-        };
-
-        setToDo((oldToDos) => [
-            ...oldToDos,
-            ToDoConvert
-        ]);
-
-        setValue("toDoText", "");
+        if(toDoText === ""){
+            setFocus("toDoText");
+            return;
+        } else {
+            const ToDoConvert: I_ToDo = {
+                ID: Date(),
+                ToDo: toDoText,
+                Category: Categorys.ToDo
+            };
+    
+            setToDo((oldToDos) => [
+                ...oldToDos,
+                ToDoConvert
+            ]);
+            setValue("toDoText", "");
+        }
     };
-
-    console.log(ToDo);
 
     return (
         <form onSubmit={handleSubmit(saveToDos)}>
@@ -38,6 +49,7 @@ function ToDoForm(){
                 type="text" 
                 placeholder="일정을 입력해주세요."
             />
+            <ToDoBtn todoInput={Inputs}>등록</ToDoBtn>
         </form>
     );
 };

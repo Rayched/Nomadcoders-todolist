@@ -42,3 +42,49 @@
 
 ---
 
+### 📆 Day 1 작업 요약 (2024.12.02 월요일)
+- 저번에 하던 거에 이어서 `To Do List` 작업을 진행하였다.
+
+- **📑 "Category 변경 기능 추가"**
+    1. **`ToDoItems` Components 구조 수정**
+        - `Category` 변경 기능을 업데이트하기 위해선 <br/>
+        기존에 `ToDoItems` Component의 코드를 수정할 필요가 생겼다.
+        - `ToDoItems`를 `ToDoItem` 컴포넌트만 return하도록 수정하고 <br/>
+        기존 `ToDoItems`의 역할을 `<Home />`으로 이관시켰다.
+
+        - `ToDoItem`는 인자로 `{ID, ToDo, Category}` 전달받고 <br/>
+        이를 기반으로 `ToDoItem`을 return하는 역할만 하게됐다.
+
+        - 이걸로 전과 비교했을 때, 각 `ToDoItem`의 구분이 용이해졌다.
+    
+    2. **`Category` 변경하는 버튼 추가**
+        - 처음에는 `ToDo / Doing / Done` 순으로 버튼을 추가하려고 했다.
+
+        - `To Do List` App에서 일정을 입력하고, **`등록`** 버튼을 누르면 <br/>
+        일정이 등록이 되는데 이때 초기 카테고리는 `ToDo (일정 등록)`이다.
+
+        - 버튼을 통해 `Doing`이나 `Done`으로 카테고리를 변경할 수 있어야 한다.
+
+        - 물론 `Doing/Done`에서 `ToDo`로 변경도 가능해야 한다.
+
+        <img src="refImgs/20241202_categoryBtn.png">
+
+        - 위와 같은 형태로 `Category` 변경 버튼을 추가하였다.
+        - **`[일정 내용 / 현재 카테고리 / {변경 버튼's}]`**
+
+        - 아무 ToDoItem의 카테고리 변경 버튼을 클릭하면 <br/>
+        일정을 저장해둔 `ToDos`에서 해당 `ToDoItem`과 일치하는 <br/>
+        `ID` 값을 가진 `ToDo` 요소를 찾아서 `Category` 변경한다.
+
+        - 변경된 것은 버튼 바로 옆의 현재 카테고리에서 확인 가능하다.
+
+---
+<br/>
+
+- **📑 ""**
+            
+
+
+
+
+

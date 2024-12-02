@@ -1,8 +1,8 @@
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { isDark } from "../modules/Atoms";
+import { isDark, ToDoAtoms } from "../modules/Atoms";
 import ToDoForm from "./ToDoForm";
-import ToDoItems from "./ToDoItems";
+import ToDoItems from "./ToDoItem";
 
 const MainWrapper = styled.div`
     display: flex;
@@ -47,8 +47,15 @@ const CategoryItems = styled.div`
 
 const ToDoWrapper = styled.div``;
 
+const ToDoList = styled.div`
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+`;
+
 function Home(){
     const [Darks, setDark] = useRecoilState(isDark);
+    const ToDos = useRecoilValue(ToDoAtoms);
 
     const ChangeThemes = () => setDark(!Darks);
     return (
@@ -66,7 +73,15 @@ function Home(){
             </CategoryBars>
             <ToDoWrapper>
                 <ToDoForm />
-                <ToDoItems />
+                <ToDoList>
+                    <ul>
+                        {
+                            ToDos?.map((todos) => {
+                                return <ToDoItems ID={todos.ID} ToDo={todos.ToDo} Category={todos.Category}/>
+                            })
+                        }
+                    </ul>
+                </ToDoList>
             </ToDoWrapper>
         </MainWrapper>
     );

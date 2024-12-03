@@ -1,8 +1,8 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { Categorys, isDark, SelectCategorys, ToDoAtoms, ToDoSelectors } from "../modules/Atoms";
-import ToDoForm from "./ToDoForm";
-import ToDoItem from "./ToDoItem";
+import { Categorys, isDarkThemes, SelectCategorys, ToDoSelectors } from "./modules/Atoms";
+import AddToDo from "./Components/AddToDo";
+import ToDoItem from "./Components/ToDoItem";
 
 interface I_CategoryBtn {
     nowTabs: string;
@@ -51,31 +51,24 @@ const CategoryItems = styled.button<I_CategoryBtn>`
     border: 2px solid ${(props) => props.nowTabs === props.value ? props.theme.itemBgColor : props.theme.itemBorderColor};
 `;
 
- /*
-        color: ${(props) => props.name === props.nowTabs ? props.theme.itemTextColor: "inherits"};
-        background-color: ${
-        (props) => props.name === props.nowTabs ? 
-        props.theme.itemBorderColor : props.theme.itemBgColor
-    };
+const ToDoWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 5px;
+    margin-top: 5px;
+`;
 
-    border: 2px solid ${
-        (props) => props.name === props.nowTabs ? 
-        props.theme.itemBgColor : props.theme.itemBorderColor
-    };
-    */
-
-const ToDoWrapper = styled.div``;
-
-const ToDoList = styled.div`
+const ToDoItems = styled.ul`
     display: flex;
     flex-direction: column;
     font-weight: bold;
 `;
 
 function Home(){
-    const [Darks, setDark] = useRecoilState(isDark);
-    const ToDos = useRecoilValue(ToDoSelectors);
+    const [Darks, setDark] = useRecoilState(isDarkThemes);
     const [nowCategorys, setCategorys] = useRecoilState(SelectCategorys);
+    const ToDos = useRecoilValue(ToDoSelectors);
 
     const TabChange = (event: React.MouseEvent<HTMLButtonElement>) => {
         const {currentTarget: {value}} = event;
@@ -88,8 +81,6 @@ function Home(){
     }
 
     const ChangeThemes = () => setDark(!Darks);
-
-    console.log(ToDos);
 
     return (
         <MainWrapper key="ToDoList">
@@ -105,18 +96,16 @@ function Home(){
                 <CategoryItems value={Categorys.Done} onClick={TabChange} nowTabs={nowCategorys}>일정 완료</CategoryItems>
             </CategoryBars>
             <ToDoWrapper>
-                <ToDoForm />
-                <ToDoList>
-                    <ul>
-                        {
-                            ToDos.map((todo) => {
-                                return (
-                                    <ToDoItem ID={todo.ID} ToDo={todo.ToDo} Category={todo.Category} />
-                                );
-                            })
-                        }
-                    </ul>
-                </ToDoList>
+                <AddToDo />
+                <ToDoItems>
+                    {
+                        ToDos.map((todo) => {
+                            return (
+                                <ToDoItem ID={todo.ID} ToDo={todo.ToDo} Category={todo.Category}/>
+                            );
+                        })
+                    }
+                </ToDoItems>
             </ToDoWrapper>
         </MainWrapper>
     );

@@ -99,4 +99,37 @@
 
 - **📑 "Project Publishing Start"**
 
+- **📑 "ToDoItems, 영속성 Update"**
+    - **`recoil-persist`** 라는 Library를 통해서 <br/>
+    `ToDoItem`들을 LocalStorage에 저장하는 것을 넘어서 <br/>
+    영속성, 새로고침을 해도 남아있게 할 수 있다.
+
+    - 아래 코드를 `Atoms.ts` 파일에 추가하는 것으로 <br/>
+    손쉽게 `ToDoItem`을 LocalStorage에 저장할 수 있다.
+
+    ``` ts
+    import {recoilPersist} from "recoil-persist";
+
+    const {persistAtom} = recoilPersist({
+        key: "ToDosLocal", //key 값은 원하는 값을 넣으면 된다.
+        storage: localStorage
+    });
+
+    export const ToDoAtoms = atom<I_ToDo[]>({
+        key: "ToDoOrigin",
+        default: [],
+        effects_UNSTABLE: [persistAtom] //New
+    });
+    ```
+
+    - `AddToDo` Form에서 입력한 `To Do` 정보를 `ToDoAtoms`에 저장한다.
+    - 그리고 `recoilPersist` Hook을 통해서 저장한 정보를 <br/>
+    `localStorage`에 영구적으로 저장할 수 있다.
+
+    - 오늘 처음배운 기능이라 적용만 해두기로 했다.
+    - 상세한 원리는 챌린지가 끝나고 나서 알아보자...
+
+---
+
+
 

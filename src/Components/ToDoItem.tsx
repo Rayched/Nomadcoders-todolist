@@ -18,8 +18,17 @@ const Items = styled.li`
 const CategoryBtn = styled.button`
     margin-left: 3px;
     display: flex;
-    border: 2px solid black;
-    border-radius: 10px;
+    font-weight: bold;
+    color: ${(props) => props.theme.itemTextColor};
+    background-color: ${(props) => props.theme.itemBorderColor};
+    border: 2px solid ${(props) => props.theme.bgColor};
+    border-radius: 14px;
+`;
+
+const DeleteBtn = styled(CategoryBtn)`
+    color: white;
+    background-color:#ef5777;
+    border: 2px solid #ef5777;
 `;
 
 function ToDoItem({ID, ToDo, Category}: I_ToDo){
@@ -58,7 +67,7 @@ function ToDoItem({ID, ToDo, Category}: I_ToDo){
                 {Category === Categorys.ToDo ? null : <CategoryBtn name="ToDo" onClick={ChangeCategory}>등록</CategoryBtn>}
                 {Category === Categorys.Doing ? null : <CategoryBtn name="Doing" onClick={ChangeCategory}>진행</CategoryBtn>}
                 {Category === Categorys.Done ? null : <CategoryBtn name="Done" onClick={ChangeCategory}>완료</CategoryBtn>}
-                <CategoryBtn onClick={ToDo_Delete}>삭제</CategoryBtn>
+                <DeleteBtn onClick={ToDo_Delete}>삭제</DeleteBtn>
             </Items>
         </div>
     );

@@ -3,6 +3,7 @@
  */
 
 import { atom, selector } from "recoil";
+import { recoilPersist } from "recoil-persist";
 
 export const enum Categorys {
     ToDo = "ToDo",
@@ -37,19 +38,25 @@ const Categories: I_Categories[] = [
  * 이게 될지는 모르겠다...
  */
 
-export const isDark = atom({
-    key: "isDarks",
+export const isDarkThemes = atom({
+    key: "isDarkThemes",
     default: false
 });
 
 export const SelectCategorys = atom({
     key: "SelectedCategorys",
     default: Categorys.ToDo
+});
+
+const {persistAtom} = recoilPersist({
+    key: "ToDoLocal",
+    storage: localStorage
 })
 
 export const ToDoAtoms = atom<I_ToDo[]>({
     key: "ToDoOrigin",
-    default: []
+    default: [],
+    effects_UNSTABLE: [persistAtom]
 });
 
 export const ToDoSelectors = selector({

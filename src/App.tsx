@@ -1,9 +1,9 @@
 import React from 'react';
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { useRecoilValue } from 'recoil';
-import { isDark } from './modules/Atoms';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { isDarkThemes } from './modules/Atoms';
 import { DarkTheme, LightTheme } from './modules/Theme';
-import Home from './Components/Home';
+import Home from './Home';
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -54,11 +54,11 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
-  const isDarks = useRecoilValue(isDark);
+  const isDark = useRecoilValue(isDarkThemes)
 
   return (
     <>
-      <ThemeProvider theme={isDarks ? DarkTheme : LightTheme}>
+      <ThemeProvider theme={isDark ? DarkTheme : LightTheme}>
         <GlobalStyle />
         <Home />
       </ThemeProvider>

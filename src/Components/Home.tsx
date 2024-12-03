@@ -76,7 +76,6 @@ function Home(){
     const [Darks, setDark] = useRecoilState(isDark);
     const ToDos = useRecoilValue(ToDoSelectors);
     const [nowCategorys, setCategorys] = useRecoilState(SelectCategorys);
-    
 
     const TabChange = (event: React.MouseEvent<HTMLButtonElement>) => {
         const {currentTarget: {value}} = event;
@@ -90,8 +89,10 @@ function Home(){
 
     const ChangeThemes = () => setDark(!Darks);
 
+    console.log(ToDos);
+
     return (
-        <MainWrapper>
+        <MainWrapper key="ToDoList">
             <Headers>
                 <Titles>To Do List</Titles>
                 <NavBars>

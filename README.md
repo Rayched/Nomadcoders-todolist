@@ -99,7 +99,7 @@
 
 - **📑 "Project Publishing Start"**
 
-- **📑 "ToDoItems, 영속성 Update"**
+- **📑 "ToDoAtoms, localStorage에 영구적으로 저장하는 기능 추가"**
     - **`recoil-persist`** 라는 Library를 통해서 <br/>
     `ToDoItem`들을 LocalStorage에 저장하는 것을 넘어서 <br/>
     영속성, 새로고침을 해도 남아있게 할 수 있다.

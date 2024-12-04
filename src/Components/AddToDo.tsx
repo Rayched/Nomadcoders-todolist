@@ -30,7 +30,7 @@ const ToDoInput = styled.input`
 `;
 
 const ToDoBtn = styled.button<I_ToDoBtn>`
-    display: ${({todoInput}) => todoInput === "" ? "none" : "inline-block"};
+    display:  inline-block;
     margin-left: 3px;
     width: 50px;
     height: 25px;
@@ -40,6 +40,11 @@ const ToDoBtn = styled.button<I_ToDoBtn>`
     background-color: ${(props) => props.theme.itemBgColor};
     border: 2px solid ${(props) => props.theme.itemBorderColor};
     border-radius: 20px;
+
+    &:hover {
+        color: ${(props) => props.theme.itemTextColor};
+        background-color: ${(props) => props.theme.itemBorderColor};
+    }
 `;
 
 function AddToDo(){

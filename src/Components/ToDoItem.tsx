@@ -1,31 +1,54 @@
 import styled from "styled-components";
-import { Categorys, I_ToDo, ToDoAtoms } from "../modules/Atoms";
-import { useSetRecoilState } from "recoil";
+import { CategoryAtom, DefaultCategory, I_Categories, I_ToDo, SelectCategorys, ToDoAtoms } from "../modules/Atoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { prependOnceListener } from "process";
 
+interface I_CategoryBtn {
+    BtnName?: string;
+    NowTabs?: string;
+};
 
-const Items = styled.li`
+const ItemWrapper = styled.li`
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
     background-color: ${(props) => props.theme.itemBgColor};
     border: 2px solid ${(props) => props.theme.itemBorderColor};
     border-radius: 10px;
     margin: 5px 0px;
     padding: 5px;
+
+    .Btns {
+        display: flex;
+        flex-direction: row;
+    }
 `;
 
-const CategoryBtn = styled.button`
-    margin-left: 3px;
+const ToDoText = styled.div`
     display: flex;
+    justify-content: left;
+    padding: 5px;
+`;
+
+const BtnsBox = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: end;
+    padding: 5px 0px;
+`;
+
+const CategoryBtn = styled.button<I_CategoryBtn>`
+    margin-left: 3px;
+    display: ${(props) => props.value === props.NowTabs ? "none" : "flex"};
     font-weight: bold;
     color: ${(props) => props.theme.itemTextColor};
     background-color: ${(props) => props.theme.itemBorderColor};
-    border: 2px solid ${(props) => props.theme.bgColor};
+    border: 2px solid ${(props) => props.theme.itemBorderColor};
     border-radius: 14px;
 `;
 
 const DeleteBtn = styled(CategoryBtn)`
+    display: flex;
     color: white;
     background-color:#ef5777;
     border: 2px solid #ef5777;
@@ -33,14 +56,16 @@ const DeleteBtn = styled(CategoryBtn)`
 
 function ToDoItem({ID, ToDo, Category}: I_ToDo){
     const setToDos = useSetRecoilState(ToDoAtoms);
+    const Categories = useRecoilValue(CategoryAtom);
+    const nowCategories = useRecoilValue(SelectCategorys);
 
     const ChangeCategory = (event: React.MouseEvent<HTMLButtonElement>) => {
-        const {currentTarget: {name}} = event;
+        const {currentTarget: {value}} = event;
 
         setToDos((oldToDos) => {
             const TargetIndex = oldToDos?.findIndex((todo) => todo.ID === ID);
             const newToDo: I_ToDo = {
-                ID, ToDo, Category: name as Categorys
+                ID, ToDo, Category: value as I_Categories["key"]
             };
 
             return [
@@ -52,24 +77,37 @@ function ToDoItem({ID, ToDo, Category}: I_ToDo){
     };
 
     const ToDo_Delete = () => {
-        setToDos((oldToDos) => {
-            const TargetIndex = oldToDos.findIndex((todo) => ID === todo.ID);
-            const BeforeTarget = oldToDos.slice(0, TargetIndex);
-            const AfterTarget = oldToDos.slice(TargetIndex + 1);
-            return [...BeforeTarget, ...AfterTarget]
-        });
+        const isDelete = window.confirm("일정을 삭제 하시겠습니까?");
+        
+        if(isDelete){
+            setToDos((oldToDos) => {
+                const TargetIndex = oldToDos.findIndex((todo) => ID === todo.ID);
+                const BeforeTarget = oldToDos.slice(0, TargetIndex);
+                const AfterTarget = oldToDos.slice(TargetIndex + 1);
+                return [...BeforeTarget, ...AfterTarget]
+            });
+            alert("일정이 삭제됐습니다.");
+        } else {
+            return;
+        }
     };
 
     return (
-        <div>
-            <Items>
-                {ToDo}
-                {Category === Categorys.ToDo ? null : <CategoryBtn name="ToDo" onClick={ChangeCategory}>등록</CategoryBtn>}
-                {Category === Categorys.Doing ? null : <CategoryBtn name="Doing" onClick={ChangeCategory}>진행</CategoryBtn>}
-                {Category === Categorys.Done ? null : <CategoryBtn name="Done" onClick={ChangeCategory}>완료</CategoryBtn>}
+        <ItemWrapper>
+            <ToDoText>{ToDo}</ToDoText>
+            <BtnsBox>
+                {
+                    Categories.map((todo) => {
+                        return (
+                            <CategoryBtn NowTabs={nowCategories} value={todo.key} onClick={ChangeCategory}>
+                                {todo.value}
+                            </CategoryBtn>
+                        );
+                    })
+                }
                 <DeleteBtn onClick={ToDo_Delete}>삭제</DeleteBtn>
-            </Items>
-        </div>
+            </BtnsBox>
+        </ItemWrapper>
     );
 };
 

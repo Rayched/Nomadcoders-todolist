@@ -5,38 +5,32 @@
 import { atom, selector } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
-export const enum Categorys {
-    ToDo = "ToDo",
-    Doing = "Doing",
-    Done = "Done"
-};
-
 export interface I_ToDo {
     ID?: string;
     ToDo?: string;
-    Category?: Categorys;
+    Category?: I_Categories["key"];
 };
 
-interface I_Categories {
-    categoryNm: string;
-    categoryValue: string;
-};
+export interface I_Categories {
+    key: string;
+    value: string;
+}
 
-//커스텀 카테고리 등록을 위한 새로운 카테고리 배열
-const Categories: I_Categories[] = [
-    {categoryNm: "ToDo", categoryValue: "일정 등록"}, 
-    {categoryNm: "Doing", categoryValue: "일정 진행"}, 
-    {categoryNm: "Done", categoryValue: "일정 완료"}
+const {persistAtom: saveToDos} = recoilPersist({
+    key: "ToDosLocal",
+    storage: localStorage
+});
+
+const {persistAtom: saveCategories} = recoilPersist({
+    key: "CategoryLocal",
+    storage: localStorage
+});
+
+export const DefaultCategory: I_Categories[] = [
+    { key: "ToDo", value: "등록"},
+    { key: "Doing", value: "진행"},
+    { key: "Done", value: "완료"}
 ];
-
-/**
- * 사용자로 부터 커스텀 카테고리를 입력 받고
- * Array.push()와 같은 배열에 요소를 추가하는 메서드를 이용해서
- * 입력 값을 categoryNm, categoryValue 속성에 전달하면
- * 새로운 커스텀 카테고리를 추가할 수 있지 않을까..?
- * 아직 생각만 한거고, 실제로 적용하지는 않았다.
- * 이게 될지는 모르겠다...
- */
 
 export const isDarkThemes = atom({
     key: "isDarkThemes",
@@ -45,18 +39,19 @@ export const isDarkThemes = atom({
 
 export const SelectCategorys = atom({
     key: "SelectedCategorys",
-    default: Categorys.ToDo
+    default: DefaultCategory[0].key
 });
 
-const {persistAtom} = recoilPersist({
-    key: "ToDoLocal",
-    storage: localStorage
-})
+export const CategoryAtom = atom<I_Categories[]>({
+    key: "CategoriesBackup",
+    default: DefaultCategory,
+    effects_UNSTABLE: [saveCategories]
+});
 
 export const ToDoAtoms = atom<I_ToDo[]>({
     key: "ToDoOrigin",
     default: [],
-    effects_UNSTABLE: [persistAtom]
+    effects_UNSTABLE: [saveToDos]
 });
 
 export const ToDoSelectors = selector({

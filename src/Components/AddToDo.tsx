@@ -23,7 +23,7 @@ const ToDoInput = styled.input`
     border: 2px solid ${(props) => props.theme.itemBorderColor};
     background-color: ${(props) => props.theme.bgColor};
     border-radius: 15px;
-    width: 220px;
+    width: 40vh;
     height: 30px;
     font-weight: bold;
     text-align: center;
@@ -32,9 +32,9 @@ const ToDoInput = styled.input`
 const ToDoBtn = styled.button<I_ToDoBtn>`
     display: ${({todoInput}) => todoInput === "" ? "none" : "inline-block"};
     margin-left: 3px;
-    width: 25px;
+    width: 50px;
     height: 25px;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
     color: ${(props) => props.theme.textColor};
     background-color: ${(props) => props.theme.itemBgColor};
@@ -68,7 +68,7 @@ function AddToDo(){
     };
 
     return (
-        <ToDoForm onSubmit={handleSubmit(saveToDos)}>
+        <ToDoForm onSubmit={handleSubmit(saveToDos)} autoComplete="off">
             <ToDoInput 
                 {...register(
                     "toDoText",
@@ -77,7 +77,7 @@ function AddToDo(){
                 type="text" 
                 placeholder="일정을 입력해주세요."
             />
-            <ToDoBtn todoInput={Inputs}>+</ToDoBtn>
+            <ToDoBtn todoInput={Inputs}>등록</ToDoBtn>
         </ToDoForm>
     );
 };

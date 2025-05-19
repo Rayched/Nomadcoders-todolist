@@ -27,7 +27,7 @@ export default function AddToDo(){
 
     const onValid = ({ToDoText}: I_ToDoForm) => {
         const NewToDo: I_ToDoData = {
-            ToDoId: FullDate + ToDoText,
+            ToDoId: FullDate + ToDoText?.split(" ").join(""),
             ToDoNm: String(ToDoText),
             Category: NowCategory.categoriesId
         };

@@ -4,7 +4,8 @@ import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import AddToDo from "./AddToDo";
 import { getNowDate } from "../modules/getNowDate";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import ToDoItems from "./ToDoItems";
 
 interface I_CategoryItem {
     categoryId: string;
@@ -60,14 +61,9 @@ const ToDoBox = styled.div`
     justify-content: center;
 `;
 
-const ToDoItems = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-`;
-
 export function Home(){
+    const [Show, setShow] = useState(false);
+
     const CategoryData = BasicCategory;
     const ToDos = useRecoilValue(ToDoSelector);
     const [NowCategory, setNowCategory] = useRecoilState(NowCategories);
@@ -108,33 +104,13 @@ export function Home(){
                     }
                 </CategoryBox>
                 <CategoryBox key="CustomCategory">
-                    <button>편집</button>
+                    {Show ? null : <button onClick={() => setShow(true)}>편집</button>}
+                    {Show ? <button onClick={() => setShow(false)}>추가</button> : null}
+                    {Show ? <button onClick={() => setShow(false)}>삭제</button> : null}
                 </CategoryBox>
                 <ToDoBox>
                     <AddToDo />
-                    <ToDoItems>
-                        <div className="ItemsTitle">일정 목록</div>
-                        <ul>
-                            {
-                                ToDos.map((data) => {
-                                    return (
-                                        <li key={data.ToDoId}>
-                                            {data.ToDoNm}
-                                            <select className="categorySwitch">
-                                                <option>카테고리 선택</option>
-                                                <optgroup className="categories">
-                                                    {data.Category === CategoryData[0].categoriesId ? null : <option key={CategoryData[0].categoriesId}>{CategoryData[0].categoriesNm}</option>}
-                                                    {data.Category === CategoryData[1].categoriesId ? null : <option key={CategoryData[1].categoriesId}>{CategoryData[1].categoriesNm}</option>}
-                                                    {data.Category === CategoryData[2].categoriesId ? null : <option key={CategoryData[2].categoriesId}>{CategoryData[2].categoriesNm}</option>}
-                                                </optgroup>
-                                            </select>
-                                            <button onClick={() => window.confirm(`'${data.ToDoNm}' 일정을 삭제하겠습니까?`)}>삭제</button>
-                                        </li>
-                                    );
-                                })
-                            }
-                        </ul>
-                    </ToDoItems>
+                    <ToDoItems />
                 </ToDoBox>
             </Container>
         </Wrapper>

@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { I_ToDoData, NowCategories, ToDos_Atom } from "./Atom";
-import { getNowDate } from "./getNowDate";
+import { I_ToDoData, NowCategories, ToDos_Atom } from "../Atom";
+import { getNowDate } from "../modules/getNowDate";
 import { useEffect } from "react";
 
 interface I_ToDoForm {

@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { BasicCategory, I_Category, NowCategories, ToDos_Atom, ToDoSelector } from "./Atom";
+import { BasicCategory, I_Category, NowCategories, ToDos_Atom, ToDoSelector } from "../Atom";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import AddToDo from "./AddToDo";
-import { getNowDate } from "./getNowDate";
+import { getNowDate } from "../modules/getNowDate";
 import { useEffect } from "react";
 
 interface I_CategoryItem {

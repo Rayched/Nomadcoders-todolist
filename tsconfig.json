@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "old_version/modules", "old_version/Components", "old_version/Home.tsx"  ]
 }

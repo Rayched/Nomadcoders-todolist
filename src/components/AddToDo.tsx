@@ -9,7 +9,10 @@ interface I_ToDoForm {
     ToDoText?: string;
 };
 
-const ToDoForm = styled.form``;
+const ToDoForm = styled.form`
+    display: flex;
+    justify-content: center;
+`;
 
 const ToDoInput = styled.input``;
 

@@ -117,7 +117,20 @@ export function Home(){
                         <ul>
                             {
                                 ToDos.map((data) => {
-                                    return <li key={data.ToDoId}>{data.ToDoNm}</li>
+                                    return (
+                                        <li key={data.ToDoId}>
+                                            {data.ToDoNm}
+                                            <select className="categorySwitch">
+                                                <option>카테고리 선택</option>
+                                                <optgroup className="categories">
+                                                    {data.Category === CategoryData[0].categoriesId ? null : <option key={CategoryData[0].categoriesId}>{CategoryData[0].categoriesNm}</option>}
+                                                    {data.Category === CategoryData[1].categoriesId ? null : <option key={CategoryData[1].categoriesId}>{CategoryData[1].categoriesNm}</option>}
+                                                    {data.Category === CategoryData[2].categoriesId ? null : <option key={CategoryData[2].categoriesId}>{CategoryData[2].categoriesNm}</option>}
+                                                </optgroup>
+                                            </select>
+                                            <button onClick={() => window.confirm(`'${data.ToDoNm}' 일정을 삭제하겠습니까?`)}>삭제</button>
+                                        </li>
+                                    );
                                 })
                             }
                         </ul>
@@ -127,3 +140,18 @@ export function Home(){
         </Wrapper>
     );
 }
+
+/**
+ * 커스텀 카테고리 관련
+ * 
+ * 처음 랜더링될 때, localStorage에 저장된 Custom Category가 없으면
+ * '편집'이라고 써있는 버튼만 나오고
+ * 이 상태에서 편집 버튼을 클릭하면
+ * '편집' 버튼이 사라지고
+ * 대신 '추가'/'삭제' 버튼이 나오게 해보자.
+ * 
+ * 추가 버튼을 클릭하면, 카테고리 이름을 쓰는 알림창이 나오고
+ * 이름을 입력하면, 해당 이름의 커스텀 카테고리가 나오게 해보자.
+ * 
+ * {Id => 카테고리 생성 일 + 텍스트, Nm => 사용자가 입력한 텍스트}
+ */

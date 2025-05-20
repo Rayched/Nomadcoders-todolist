@@ -35,8 +35,6 @@ export default function AddToDo(){
         setValue("ToDoText", "");
     }
 
-    useEffect(() => console.log(FullDate));
-
     return (
         <ToDoForm onSubmit={handleSubmit(onValid)}>
             <ToDoInput type="text" placeholder="일정을 입력해주세요." {...register("ToDoText", {required: "일정을 입력하지 않았습니다."})} />

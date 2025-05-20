@@ -39,5 +39,20 @@ export const ToDoSelector = selector({
         const NowCategory = get(NowCategories).categoriesId;
 
         return ToDosData.filter((todoData) => todoData.Category === NowCategory);
+    },
+    set: ({set}, ModifyData) => {
+        set(ToDos_Atom, ModifyData);
     }
+});
+
+export const AllCategories = selector({
+    key: "AllCategorySelector",
+    get: ({get}) => {
+        const Customs = get(CustomCategories);
+        
+        const AllCategory = BasicCategory.concat(Customs);
+
+        return AllCategory;
+    },
+    set: ({get, set}) => {}
 });

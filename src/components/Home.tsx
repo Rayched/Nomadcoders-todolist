@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { BasicCategory, I_Category, NowCategories, ToDos_Atom, ToDoSelector } from "../Atom";
+import { AllCategories, BasicCategory, CustomCategories, I_Category, I_ToDoData, NowCategories, ToDos_Atom, ToDoSelector } from "../Atom";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import AddToDo from "./AddToDo";
 import { getNowDate } from "../modules/getNowDate";
 import { useEffect, useState } from "react";
-import ToDoItems from "./ToDoItems";
+import ToDoItem from "./ToDoItem";
 
 interface I_CategoryItem {
     categoryId: string;
@@ -59,29 +59,64 @@ const ToDoBox = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 `;
+
+const ToDoList = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`;
+
+const EditToDoBtn = styled.button``;
 
 export function Home(){
     const [Show, setShow] = useState(false);
+    const [EditMode, setEditMode] = useState(false);
 
     const CategoryData = BasicCategory;
-    const ToDos = useRecoilValue(ToDoSelector);
+
     const [NowCategory, setNowCategory] = useRecoilState(NowCategories);
+    const AllCategory = useRecoilValue(AllCategories);
+    const [Customs, setCustoms] = useRecoilState(CustomCategories);
+
+    const ToDos = useRecoilValue(ToDoSelector);
 
     const onChange = (Id: string) => {
         if(NowCategory.categoriesId === Id){
             return;
         } else {
-            const Idx = CategoryData.findIndex((data) => data.categoriesId === Id);
+            const Idx = AllCategory.findIndex((data) => data.categoriesId === Id);
+            const TargetCategory = AllCategory[Idx];
+
             setNowCategory(() => {
                 const DataFormat: I_Category = {
-                    categoriesId: CategoryData[Idx].categoriesId,
-                    categoriesNm: CategoryData[Idx].categoriesNm
+                    categoriesId: TargetCategory.categoriesId,
+                    categoriesNm: TargetCategory.categoriesNm
                 };
                 return DataFormat;
             });
         }
     }
+
+    //커스텀 카테고리를 추가 및 삭제하는 function's
+    const AddNewCategory = () => {
+        const DataInput = window.prompt("새로 추가할 카테고리의 이름을 입력해주세요.");
+        if(DataInput !== null){
+            const NewCategory: I_Category = {
+                categoriesId: getNowDate().join("") + DataInput.split(" ").join(""),
+                categoriesNm: DataInput
+            };
+            setCustoms((oldData) => [...oldData, NewCategory]);
+            setNowCategory(NewCategory);
+            setShow(false);
+        } else {
+            alert("카테고리의 이름을 입력하지 않았습니다!");
+        }
+    };
+
+    const DeleteCustomCategory = () => {};
 
     return (
         <Wrapper>
@@ -104,13 +139,38 @@ export function Home(){
                     }
                 </CategoryBox>
                 <CategoryBox key="CustomCategory">
+                    {
+                        Customs.map((data) => {
+                            return (
+                                <CategoryItem
+                                    key={data.categoriesId}
+                                    categoryId={data.categoriesId}
+                                    nowCategory={NowCategory.categoriesId}
+                                    onClick={() => onChange(data.categoriesId)}
+                                >{data.categoriesNm}</CategoryItem>
+                            );
+                        })
+                    }
                     {Show ? null : <button onClick={() => setShow(true)}>편집</button>}
-                    {Show ? <button onClick={() => setShow(false)}>추가</button> : null}
+                    {Show ? <button onClick={AddNewCategory}>추가</button> : null}
                     {Show ? <button onClick={() => setShow(false)}>삭제</button> : null}
                 </CategoryBox>
                 <ToDoBox>
                     <AddToDo />
-                    <ToDoItems />
+                    <ToDoList>
+                        <EditToDoBtn onClick={() => setEditMode((prev) => !prev)}>일정 편집</EditToDoBtn>
+                        {
+                            ToDos.map((data) => {
+                                return (
+                                    <ToDoItem 
+                                        todoId={data.ToDoId}
+                                        isShowCategoryBtn={EditMode}
+                                        setShowCategoryBtn={setEditMode}
+                                    />
+                                );
+                            })
+                        }
+                    </ToDoList>
                 </ToDoBox>
             </Container>
         </Wrapper>

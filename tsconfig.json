@@ -20,7 +20,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "src"
-, "old_version/modules", "old_version/Components", "old_version/Home.tsx"  ]
+  "include": ["src"]
 }

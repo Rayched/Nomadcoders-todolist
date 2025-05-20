@@ -99,11 +99,12 @@ function ToDoItem({todoId, isShowCategoryBtn, setShowCategoryBtn}: I_ToDoItemPro
             Category: String(CategoryInfo?.categoriesId)
         };
 
-        setToDos((oldToDos) => [
-            ...oldToDos.slice(0, targetIdx),
+        setToDos(() => [
+            ...originToDos.slice(0, targetIdx),
             EditToDo,
-            ...oldToDos.slice(targetIdx + 1)
+            ...originToDos.slice(targetIdx + 1)
         ]);
+
         setShowCategoryBtn(false);
     }
 

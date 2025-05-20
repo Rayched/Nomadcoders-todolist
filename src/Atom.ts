@@ -1,4 +1,5 @@
 import { atom, selector } from "recoil";
+import { recoilPersist } from "recoil-persist";
 
 export interface I_Category {
     categoriesId: string;
@@ -10,6 +11,16 @@ export interface I_ToDoData {
     ToDoNm: string;
     Category: string;
 };
+
+const {persistAtom: ToDosPersist} = recoilPersist({
+    key: "ToDosSave",
+    storage: localStorage
+});
+
+const {persistAtom: CategoryPersist} = recoilPersist({
+    key: "CustomCategorySave",
+    storage: localStorage
+});
 
 export const BasicCategory: I_Category[] = [
     {categoriesId: "ToDo", categoriesNm: "일정 등록"},
@@ -24,12 +35,14 @@ export const NowCategories = atom<I_Category>({
 
 export const CustomCategories = atom<I_Category[]>({
     key: "CustomCategoryAtom",
-    default: []
+    default: [],
+    effects_UNSTABLE: [CategoryPersist]
 });
 
 export const ToDos_Atom = atom<I_ToDoData[]>({
     key: "ToDosAtom",
-    default: []
+    default: [],
+    effects_UNSTABLE: [ToDosPersist]
 });
 
 export const ToDoSelector = selector({

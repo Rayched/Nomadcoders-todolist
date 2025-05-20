@@ -81,7 +81,8 @@ export function Home(){
     const AllCategory = useRecoilValue(AllCategories);
     const [Customs, setCustoms] = useRecoilState(CustomCategories);
 
-    const ToDos = useRecoilValue(ToDoSelector);
+    const originToDos = useRecoilValue(ToDos_Atom);
+    const [ToDos, setToDos] = useRecoilState(ToDoSelector);
 
     const onChange = (Id: string) => {
         if(NowCategory.categoriesId === Id){
@@ -116,7 +117,24 @@ export function Home(){
         }
     };
 
-    const DeleteCustomCategory = () => {};
+    const DeleteCategory = (targetId: string) => {
+        const Idx = Customs.findIndex((data) => data.categoriesId === targetId);
+
+        const isDelete = window.confirm(`'${Customs[Idx].categoriesNm}' 카테고리를 삭제하겠습니까?\n(해당 카테고리의 모든 일정도 같이 삭제됩니다.)`);
+
+        if(isDelete){
+            const ModifyToDos = originToDos.filter((data) => data.Category !== targetId);
+            setToDos([...ModifyToDos]);
+            setCustoms((oldCategorys) => [
+                ...oldCategorys.slice(0, Idx),
+                ...oldCategorys.slice(Idx + 1)
+            ]);
+            alert("카테고리 삭제 완료");
+            setShow(false);
+        } else {
+            alert("카테고리 삭제 취소");
+        }
+    };
 
     return (
         <Wrapper>
@@ -147,13 +165,15 @@ export function Home(){
                                     categoryId={data.categoriesId}
                                     nowCategory={NowCategory.categoriesId}
                                     onClick={() => onChange(data.categoriesId)}
-                                >{data.categoriesNm}</CategoryItem>
+                                >
+                                    {data.categoriesNm}
+                                    {Show ? <button onClick={() => DeleteCategory(data.categoriesId)}>삭제</button> : null}
+                                </CategoryItem>
                             );
                         })
                     }
                     {Show ? null : <button onClick={() => setShow(true)}>편집</button>}
                     {Show ? <button onClick={AddNewCategory}>추가</button> : null}
-                    {Show ? <button onClick={() => setShow(false)}>삭제</button> : null}
                 </CategoryBox>
                 <ToDoBox>
                     <AddToDo />

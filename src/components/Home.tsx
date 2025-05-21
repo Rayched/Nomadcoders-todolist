@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { AllCategories, BasicCategory, CustomCategories, I_Category, I_ToDoData, NowCategories, ToDos_Atom, ToDoSelector } from "../Atom";
+import { AllCategories, BasicCategory, CustomCategories, I_Category, I_ToDoData, NowCategories, ThemeAtoms, ToDos_Atom, ToDoSelector } from "../Atom";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import AddToDo from "./AddToDo";
@@ -10,6 +10,7 @@ import ToDoItem from "./ToDoItem";
 interface I_CategoryItem {
     categoryId: string;
     nowCategory: string;
+    isFocus: boolean;
 };
 
 interface I_EditToDoBtn {
@@ -21,6 +22,7 @@ const Wrapper = styled.div`
     height: 100vh;
     display: flex;
     justify-content: center;
+    background: ${(props) => props.theme.bgColor};
 `;
 
 const Container = styled.div`
@@ -45,6 +47,7 @@ const Title = styled.div`
     text-align: center;
     font-size: 2em;
     font-weight: bold;
+    color: ${(props) => props.theme.textColor};
 `;
 
 const CategoryBox = styled.div`
@@ -54,10 +57,9 @@ const CategoryBox = styled.div`
     width: 98%;
     padding: 5px;
     margin-bottom: 5px;
-    background-color: rgb(213, 214, 215);
-    border: 2px solid rgb(213, 214, 215);
+    background-color: ${(props) => props.theme.itemBoxColor};
+    border: 2px solid ${(props) => props.theme.itemColor};
     border-radius: 15px;
-    box-shadow: 1px 1px rgba(200, 210, 210, 0.5);
 `;
 
 const BasicCategorys = styled.div`
@@ -84,12 +86,13 @@ const CategoryItem = styled.div<I_CategoryItem>`
     width: 30%;
     padding: 5px;
     margin: 0px 3px;
-    border: 2px solid ${(props) => props.categoryId === props.nowCategory ? "rgb(164, 176, 190)" : "rgb(223, 228, 234)"};
+    border: 2px solid ${(props) => props.theme.itemColor};
     border-radius: 10px;
     font-weight: bold;
+    color: ${(props) => props.categoryId === props.nowCategory ? props.theme.itemsFocusTextColor : props.theme.textColor};
     background-color: ${(props) => 
         props.categoryId === props.nowCategory 
-        ? "rgb(164, 176, 190)" : "rgb(223, 228, 234)"
+        ? props.theme.itemFocusColor : props.theme.itemColor
     };
 `;
 
@@ -117,13 +120,15 @@ const EditToDoBtn = styled.button<I_EditToDoBtn>`
     border-radius: 13px;
     font-size: 17px;
     font-weight: bold;
-    color: rgb(245, 244, 245);
-    background-color: rgb(116, 125, 140);
+    color: black;
+    background-color: ${(props) => props.theme.itemFocusColor};
 `;
 
 export function Home(){
     const [Show, setShow] = useState(false);
     const [EditMode, setEditMode] = useState(false);
+
+    const isDarks = useRecoilValue(ThemeAtoms);
 
     const CategoryData = BasicCategory;
 
@@ -203,6 +208,7 @@ export function Home(){
                                         key={data.categoriesId} 
                                         categoryId={data.categoriesId} 
                                         nowCategory={NowCategory.categoriesId}
+                                        isFocus={isDarks}
                                         onClick={() => onChange(data.categoriesId)}
                                     >{data.categoriesNm}</CategoryItem>
                                 );
@@ -217,6 +223,7 @@ export function Home(){
                                         key={data.categoriesId}
                                         categoryId={data.categoriesId}
                                         nowCategory={NowCategory.categoriesId}
+                                        isFocus={isDarks}
                                         onClick={() => onChange(data.categoriesId)}
                                     >
                                         {data.categoriesNm}

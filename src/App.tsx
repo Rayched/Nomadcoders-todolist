@@ -1,5 +1,8 @@
-import styled, { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import { Home } from "./components/Home";
+import { useRecoilState } from "recoil";
+import { ThemeAtoms } from "./Atom";
+import { DarkColors, LightColors } from "./modules/theme";
 
 const GlobalStyle = createGlobalStyle`
   /* http://meyerweb.com/eric/tools/css/reset/ 
@@ -34,6 +37,10 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     line-height: 1;
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
   }
   ol, ul {
     list-style: none;
@@ -52,11 +59,33 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const ThemeBtn = styled.div`
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${(props) => props.theme.textColor};
+  background-color: ${(props) => props.theme.itemColor};
+  border: 2px solid ${(props) => props.theme.itemFocusColor};
+  border-radius: 20px;
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  font-size: 10px;
+  font-weight: bold;
+`;
+
 function App(){
+  const [isDarkTheme, setDarkTheme] = useRecoilState(ThemeAtoms);
+
   return (
     <>
-      <Home />
-      <GlobalStyle />
+      <ThemeProvider theme={isDarkTheme ? DarkColors : LightColors}>
+        <Home />
+        <GlobalStyle />
+        <ThemeBtn onClick={() => setDarkTheme((prev) => !prev)}>{isDarkTheme ? "Dark" : "Light"}</ThemeBtn>
+      </ThemeProvider>
     </>
   );
 };

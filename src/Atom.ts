@@ -67,5 +67,9 @@ export const AllCategories = selector({
 
         return AllCategory;
     },
-    set: ({get, set}) => {}
+});
+
+export const ThemeAtoms = atom({
+    key: "ThemeAtom",
+    default: false
 });

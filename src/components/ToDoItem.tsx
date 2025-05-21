@@ -25,8 +25,8 @@ const Container = styled.div`
     width: 18em;
     padding: 5px;
     margin: 5px 0px;
-    background: rgb(220, 221, 225);
-    border: 2px solid rgb(220, 221, 225);
+    background-color: ${(props) => props.theme.itemBoxColor};
+    border: 2px solid ${(props) => props.theme.itemFocusColor};
     border-radius: 15px;
 `;
 

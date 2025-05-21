@@ -17,8 +17,8 @@ const ToDoForm = styled.form`
     height: 1.5em;
     margin-top: 5px;
     margin-bottom: 4px;
-    background-color: rgb(242, 239, 239);
-    border: 2.3px solid rgb(50, 50, 50);
+    background-color: ${(props) => props.theme.itemColor};
+    border: 2.3px solid ${(props) => props.theme.itemFocusColor};
     border-radius: 18px;
     padding: 3px;
 `;
@@ -26,6 +26,7 @@ const ToDoForm = styled.form`
 const ToDoInput = styled.input`
     display: block;
     width: 20em;
+    color: ${(props) => props.theme.textColor};
     background-color: inherit;
     border-radius: 15px;
     padding: 3px;

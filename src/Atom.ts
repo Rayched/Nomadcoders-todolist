@@ -22,6 +22,11 @@ const {persistAtom: CategoryPersist} = recoilPersist({
     storage: localStorage
 });
 
+const {persistAtom: ThemePersist} = recoilPersist({
+    key: "ThemeSettingSave",
+    storage: localStorage
+})
+
 export const BasicCategory: I_Category[] = [
     {categoriesId: "ToDo", categoriesNm: "일정 등록"},
     {categoriesId: "Doing", categoriesNm: "일정 진행"},
@@ -71,5 +76,6 @@ export const AllCategories = selector({
 
 export const ThemeAtoms = atom({
     key: "ThemeAtom",
-    default: false
+    default: false,
+    effects_UNSTABLE: [ThemePersist]
 });

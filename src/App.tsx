@@ -84,7 +84,7 @@ function App(){
       <ThemeProvider theme={isDarkTheme ? DarkColors : LightColors}>
         <Home />
         <GlobalStyle />
-        <ThemeBtn onClick={() => setDarkTheme((prev) => !prev)}>{isDarkTheme ? "Dark" : "Light"}</ThemeBtn>
+        <ThemeBtn onClick={() => setDarkTheme((prev: boolean) => !prev)}>{isDarkTheme ? "Dark" : "Light"}</ThemeBtn>
       </ThemeProvider>
     </>
   );

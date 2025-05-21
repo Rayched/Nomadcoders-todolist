@@ -12,6 +12,10 @@ interface I_CategoryItem {
     nowCategory: string;
 };
 
+interface I_EditToDoBtn {
+    isToDos: boolean;
+}
+
 const Wrapper = styled.div`
     width: 100vw;
     height: 100vh;
@@ -20,8 +24,8 @@ const Wrapper = styled.div`
 `;
 
 const Container = styled.div`
-    width: 70%;
-    max-width: 800px;
+    width: 90%;
+    max-width: 600px;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -32,26 +36,61 @@ const Header = styled.header`
     justify-content: center;
     align-items: center;
     margin: 10px 0px;
+    width: 100%;
+    height: 8%;
 `;
 
-const Title = styled.div``;
+const Title = styled.div`
+    width: 100%;
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+`;
 
 const CategoryBox = styled.div`
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
-    width: 100%;
+    width: 98%;
+    padding: 5px;
     margin-bottom: 5px;
+    background-color: rgb(213, 214, 215);
+    border: 2px solid rgb(213, 214, 215);
+    border-radius: 15px;
+    box-shadow: 1px 1px rgba(200, 210, 210, 0.5);
+`;
+
+const BasicCategorys = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 50%;
+    margin: 5px 0px;
+`;
+
+const CustomCategorys = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 40%;
+    margin: 2px 0px;
 `;
 
 const CategoryItem = styled.div<I_CategoryItem>`
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 3px;
+    width: 30%;
+    padding: 5px;
     margin: 0px 3px;
-    border: 2px solid black;
-    font-weight: ${(props) => props.categoryId === props.nowCategory ? "bold" : "none"};
+    border: 2px solid ${(props) => props.categoryId === props.nowCategory ? "rgb(164, 176, 190)" : "rgb(223, 228, 234)"};
+    border-radius: 10px;
+    font-weight: bold;
+    background-color: ${(props) => 
+        props.categoryId === props.nowCategory 
+        ? "rgb(164, 176, 190)" : "rgb(223, 228, 234)"
+    };
 `;
 
 const ToDoBox = styled.div`
@@ -65,11 +104,22 @@ const ToDoBox = styled.div`
 const ToDoList = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    padding: 3px;
+    width: 20em;
+    margin-top: 10px;
 `;
 
-const EditToDoBtn = styled.button``;
+const EditToDoBtn = styled.button<I_EditToDoBtn>`
+    display: ${(props) => props.isToDos ? "none" : "block"};
+    width: 10em;
+    border: 2px solid black;
+    border-radius: 13px;
+    font-size: 17px;
+    font-weight: bold;
+    color: rgb(245, 244, 245);
+    background-color: rgb(116, 125, 140);
+`;
 
 export function Home(){
     const [Show, setShow] = useState(false);
@@ -83,6 +133,8 @@ export function Home(){
 
     const originToDos = useRecoilValue(ToDos_Atom);
     const [ToDos, setToDos] = useRecoilState(ToDoSelector);
+
+    const ToDosLength = ToDos.length;
 
     const onChange = (Id: string) => {
         if(NowCategory.categoriesId === Id){
@@ -142,43 +194,48 @@ export function Home(){
                 <Header>
                     <Title>To Do List</Title>
                 </Header>
-                <CategoryBox key="BasicCategory">
-                    {
-                        CategoryData.map((data) => {
-                            return (
-                                <CategoryItem 
-                                    key={data.categoriesId} 
-                                    categoryId={data.categoriesId} 
-                                    nowCategory={NowCategory.categoriesId}
-                                    onClick={() => onChange(data.categoriesId)}
-                                >{data.categoriesNm}</CategoryItem>
-                            );
-                        })
-                    }
-                </CategoryBox>
-                <CategoryBox key="CustomCategory">
-                    {
-                        Customs.map((data) => {
-                            return (
-                                <CategoryItem
-                                    key={data.categoriesId}
-                                    categoryId={data.categoriesId}
-                                    nowCategory={NowCategory.categoriesId}
-                                    onClick={() => onChange(data.categoriesId)}
-                                >
-                                    {data.categoriesNm}
-                                    {Show ? <button onClick={() => DeleteCategory(data.categoriesId)}>삭제</button> : null}
-                                </CategoryItem>
-                            );
-                        })
-                    }
-                    {Show ? null : <button onClick={() => setShow(true)}>편집</button>}
-                    {Show ? <button onClick={AddNewCategory}>추가</button> : null}
+                <CategoryBox>
+                    <BasicCategorys>
+                        {
+                            CategoryData.map((data) => {
+                                return (
+                                    <CategoryItem 
+                                        key={data.categoriesId} 
+                                        categoryId={data.categoriesId} 
+                                        nowCategory={NowCategory.categoriesId}
+                                        onClick={() => onChange(data.categoriesId)}
+                                    >{data.categoriesNm}</CategoryItem>
+                                );
+                            })
+                        }
+                    </BasicCategorys>
+                    <CustomCategorys>
+                        {
+                            Customs.map((data) => {
+                                return (
+                                    <CategoryItem
+                                        key={data.categoriesId}
+                                        categoryId={data.categoriesId}
+                                        nowCategory={NowCategory.categoriesId}
+                                        onClick={() => onChange(data.categoriesId)}
+                                    >
+                                        {data.categoriesNm}
+                                        {Show ? <button onClick={() => DeleteCategory(data.categoriesId)}>삭제</button> : null}
+                                    </CategoryItem>
+                                );
+                            })
+                        }
+                        {Show ? null : <button onClick={() => setShow(true)}>카테고리 편집</button>}
+                        {Show ? <button onClick={AddNewCategory}>추가</button> : null}
+                    </CustomCategorys>
                 </CategoryBox>
                 <ToDoBox>
                     <AddToDo />
-                    <ToDoList>
-                        <EditToDoBtn onClick={() => setEditMode((prev) => !prev)}>일정 편집</EditToDoBtn>
+                    <EditToDoBtn 
+                        isToDos={ToDosLength === 0}
+                        onClick={() => setEditMode((prev) => !prev)}
+                    >일정 편집</EditToDoBtn>
+                    <ToDoList> 
                         {
                             ToDos.map((data) => {
                                 return (

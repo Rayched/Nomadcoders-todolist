@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/Nomadcoders-todolist/static/js/main.ce35d828.js",
+    "main.js": "/Nomadcoders-todolist/static/js/main.000e4e45.js",
     "index.html": "/Nomadcoders-todolist/index.html",
-    "main.ce35d828.js.map": "/Nomadcoders-todolist/static/js/main.ce35d828.js.map"
+    "main.000e4e45.js.map": "/Nomadcoders-todolist/static/js/main.000e4e45.js.map"
   },
   "entrypoints": [
-    "static/js/main.ce35d828.js"
+    "static/js/main.000e4e45.js"
   ]
 }
